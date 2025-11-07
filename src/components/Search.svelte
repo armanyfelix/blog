@@ -3,7 +3,7 @@ import Icon from "@iconify/svelte";
 import { url } from "@utils/url-utils.ts";
 import { onMount } from "svelte";
 
-// 防抖函数
+// Función antivibración
 function debounce<T extends (...args: any[]) => any>(
 	func: T,
 	wait: number
@@ -29,12 +29,12 @@ let keywordMobile = "";
 let result: SearchResult[] = [];
 let isSearching = false;
 let posts: any[] = [];
-let rssLoaded = false; // 标记 RSS 是否已加载
+let rssLoaded = false; // marca RSS ¿Se ha cargado?
 
-// 按需加载 RSS 数据
+// Carga bajo demanda RSS datos
 const loadRSS = async (): Promise<void> => {
-	if (rssLoaded) return; // 如果已经加载过，直接返回
-	
+	if (rssLoaded) return; // Si se ha cargado，Regresar directamente
+
 	try {
 		const response = await fetch("/rss.xml");
 		const text = await response.text();
@@ -45,11 +45,11 @@ const loadRSS = async (): Promise<void> => {
 		posts = Array.from(items).map((item) => {
 			// 尝试多种方式获取content:encoded内容
 			let content = "";
-			const contentEncoded = 
+			const contentEncoded =
 				item.getElementsByTagNameNS("*", "encoded")[0]?.textContent ||
 				item.querySelector("*|encoded")?.textContent ||
 				"";
-			
+
 			if (contentEncoded) {
 				// 移除HTML标签并解码HTML实体
 				const tempDiv = document.createElement("div");
@@ -60,7 +60,7 @@ const loadRSS = async (): Promise<void> => {
 			// 从link中提取相对路径
 			const linkText = item.querySelector("link")?.textContent || "";
 			let relativePath = "";
-			
+
 			// 处理多种可能的URL格式
 			if (linkText.includes("/posts/")) {
 				// 匹配 /posts/ 后的所有内容（包括多级路径）
@@ -82,7 +82,7 @@ const loadRSS = async (): Promise<void> => {
 				fullLink: linkText // 保留完整链接以备用
 			};
 		});
-		
+
 		rssLoaded = true; // 标记为已加载
 	} catch (error) {
 		console.error("Error fetching RSS:", error);
@@ -134,13 +134,13 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 				const descMatch = post.description?.toLowerCase().includes(keywordLower);
 				const linkMatch = post.link.toLowerCase().includes(keywordLower);
 				const contentMatch = post.content.toLowerCase().includes(keywordLower);
-				
+
 				return titleMatch || descMatch || linkMatch || contentMatch;
 			})
 			.map((post) => {
 				const contentLower = post.content.toLowerCase();
 				const contentIndex = contentLower.indexOf(keywordLower);
-				
+
 				let excerpt = '';
 				if (contentIndex !== -1) {
 					const start = Math.max(0, contentIndex - 50);

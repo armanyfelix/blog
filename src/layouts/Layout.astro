@@ -2,23 +2,16 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
 import ConfigCarrier from "@components/ConfigCarrier.astro";
-import { profileConfig, siteConfig } from "@/config";
+import { siteConfig } from "@/config";
 import {
-	AUTO_MODE,
 	BANNER_HEIGHT,
 	BANNER_HEIGHT_EXTEND,
 	BANNER_HEIGHT_HOME,
-	DARK_MODE,
-	DEFAULT_THEME,
-	LIGHT_MODE,
-	PAGE_WIDTH,
 } from "../constants/constants";
-import { defaultFavicons } from "../constants/icon";
-import type { Favicon } from "../types/config";
 import { pathsEqual, url } from "../utils/url-utils";
 import "katex/dist/katex.css";
+import BaseHead from "./BaseHead.astro";
 
 interface Props {
 	title?: string;
@@ -27,12 +20,10 @@ interface Props {
 	setOGTypeArticle?: boolean;
 	lang?: string;
 }
-
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
 
 const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
-const configHue = siteConfig.themeColor.hue;
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
@@ -40,16 +31,6 @@ if (!banner || typeof banner !== "string" || banner.trim() === "") {
 banner = siteConfig.banner.src;
 
 const enableBanner = siteConfig.banner.enable;
-
-let pageTitle: string;
-if (title) {
-	pageTitle = `${title} - ${siteConfig.title}`;
-} else {
-	pageTitle = `${siteConfig.title} - ${siteConfig.subtitle}`;
-}
-
-const favicons: Favicon[] =
-	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
 
 const siteLang = "zh-CN";
 
@@ -66,103 +47,12 @@ const bannerOffset =
 <html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]"
 	  data-overlayscrollbars-initialize
 >
-	<head>
-		<!-- Microsoft Clarity -->
-		<script type="text/javascript">
-			(function(c,l,a,r,i,t,y){
-				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-			})(window, document, "clarity", "script", "tajp0d55h4");
-		</script>
-		
-		<!-- Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8YKHXY480"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'G-D8YKHXY480');
-		</script>
-		
-		<!-- Umami -->
-		<script type="text/partytown" src="https://cloud.umami.is/script.js" data-website-id="a1a1f897-326f-4e68-a6f0-54e9dc361522"></script>
-		
-		<title>{pageTitle}</title>
-
-		<meta charset="UTF-8" />
-		<meta name="description" content={description || pageTitle}>
-		<meta name="author" content={profileConfig.name}>
-
-		<meta property="og:site_name" content={siteConfig.title}>
-		<meta property="og:url" content={Astro.url}>
-		<meta property="og:title" content={pageTitle}>
-		<meta property="og:description" content={description || pageTitle}>
-		{setOGTypeArticle ? (
-        <meta property="og:type" content="article" />
-        ) : (
-        <meta property="og:type" content="website" />
-        )}
-
-		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:url" content={Astro.url}>
-		<meta name="twitter:title" content={pageTitle}>
-		<meta name="twitter:description" content={description || pageTitle}>
-
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		{favicons.map(favicon => (
-			<link rel="icon"
-				  href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src}
-				  sizes={favicon.sizes}
-				  media={favicon.theme && `(prefers-color-scheme: ${favicon.theme})`}
-			/>
-		))}
-
-		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
-			// Load the theme from local storage
-			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
-			switch (theme) {
-				case LIGHT_MODE:
-					document.documentElement.classList.remove('dark');
-					break
-				case DARK_MODE:
-					document.documentElement.classList.add('dark');
-					break
-				case AUTO_MODE:
-					if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						document.documentElement.classList.add('dark');
-					} else {
-						document.documentElement.classList.remove('dark');
-					}
-			}
-
-			// Load the hue from local storage
-			const hue = localStorage.getItem('hue') || configHue;
-			document.documentElement.style.setProperty('--hue', hue);
-
-			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
-			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
-			offset = offset - offset % 4;
-			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
-		</script>
-		<style define:vars={{
-			configHue,
-			'page-width': `${PAGE_WIDTH}rem`,
-		}}></style>
-
-		<slot name="head"></slot>
-
-		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
-
-	</head>
+    <BaseHead title={title} description={description} setOGTypeArticle={setOGTypeArticle} />
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
 	>
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
-
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
 	</body>
 </html>
@@ -199,7 +89,7 @@ const bannerOffset =
 	.navbar-hidden {
 		@apply opacity-0 -translate-y-16
 	}
-	
+
 }
 </style>
 
@@ -220,9 +110,9 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const bannerEnabled = !!document.getElementById('banner-wrapper');
-let fancyboxInstance; // Fancybox 实例
+let fancyboxInstance: any; // Fancybox 实例
 
-function setClickOutsideToClose(panel, ignores) {
+function setClickOutsideToClose(panel: any, ignores: any) {
 	document.addEventListener("click", event => {
 		let panelDom = document.getElementById(panel);
 		let tDom = event.target;
@@ -252,34 +142,34 @@ function loadHue() {
  */
 function initImageLoading() {
     const imageWrappers = document.querySelectorAll('[data-image-wrapper]');
-    
+
     // 如果没有图片，直接返回
     if (imageWrappers.length === 0) return;
-    
+
     imageWrappers.forEach(wrapper => {
         const img = wrapper.querySelector('[data-image-element]');
         const loadingBar = wrapper.querySelector('.loading-bar');
-        
+
         if (!img || !loadingBar) return;
-        
+
         // 检查图片是否已经加载完成（从缓存）
         if (img.complete && img.naturalHeight !== 0) {
             img.classList.add('loaded');
             loadingBar.classList.add('hide');
             return;
         }
-        
+
         // 创建新的 Image 对象来检测加载
         const tempImg = new Image();
         tempImg.src = img.src;
-        
+
         tempImg.onload = () => {
             img.classList.add('loaded');
             setTimeout(() => {
                 loadingBar.classList.add('hide');
             }, 300);
         };
-        
+
         tempImg.onerror = () => {
             img.classList.add('loaded');
             loadingBar.classList.add('hide');
@@ -295,7 +185,7 @@ function setupImageObserver() {
     // 只有当页面上有图片时才创建观察器
     const hasImages = document.querySelectorAll('[data-image-wrapper]').length > 0;
     if (!hasImages) return;
-    
+
     const observer = new MutationObserver((mutations) => {
         let hasNewImages = false;
         mutations.forEach((mutation) => {
@@ -335,7 +225,7 @@ function initCustomScrollbar() {
 	}
 
 	const katexObserverOptions = { root: null, rootMargin: '100px', threshold: 0.1 };
-	const processKatexElement = (element) => {
+	const processKatexElement = (element: any) => {
 		if (!element.parentNode || element.hasAttribute('data-scrollbar-initialized')) return;
 		const container = document.createElement('div');
 		container.className = 'katex-display-container';
@@ -374,7 +264,7 @@ function createFancybox() {
     }
 
     // 为每个图片添加 data-fancybox 属性
-    images.forEach((img, index) => {
+    images.forEach((img: any, index) => {
         if (!img.hasAttribute('data-fancybox')) {
             img.setAttribute('data-fancybox', 'gallery');
             // 可选：添加标题，例如从 alt 属性获取
@@ -493,7 +383,7 @@ function setupSwupHooks() {
 			navbar.classList.add('navbar-hidden');
 		}
 	});
-    
+
 	window.swup.hooks.on('content:replace', () => {
         // 在替换内容前，销毁旧的灯箱实例
         if (fancyboxInstance) {
@@ -505,7 +395,7 @@ function setupSwupHooks() {
 	window.swup.hooks.on('page:view', () => {
         // 页面切换动画完成后，为新内容初始化脚本
         initPageContent();
-        
+
         // 恢复页面高度
 		const heightExtend = document.getElementById('page-height-extend');
 		if (heightExtend) heightExtend.classList.remove('hidden');
@@ -514,7 +404,7 @@ function setupSwupHooks() {
         if (toc) toc.classList.remove('toc-not-ready');
 	});
 
-	window.swup.hooks.on('visit:start', (visit) => {
+	window.swup.hooks.on('visit:start', (visit: any) => {
 		const bodyElement = document.querySelector('body');
 		if (pathsEqual(visit.to.url, url('/'))) {
 			bodyElement?.classList.add('lg:is-home');
@@ -548,7 +438,7 @@ function initializeSite() {
 	setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"]);
 	setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"]);
 	setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"]);
-	
+
     // 显示 Banner
     showBanner();
 
@@ -561,7 +451,7 @@ function initializeSite() {
 
 	// 首次加载页面时，执行内容初始化
 	initPageContent();
-	
+
 	// [新增] 设置图片观察器（仅当页面上有图片时）
 	if (document.querySelectorAll('[data-image-wrapper]').length > 0) {
 		setupImageObserver();
