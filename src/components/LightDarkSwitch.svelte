@@ -12,24 +12,24 @@ import type { LIGHT_DARK_MODE } from "@/types/config.ts";
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE];
 let mode: LIGHT_DARK_MODE = $state(AUTO_MODE);
 
-// 存储媒体查询监听器，避免重复创建
+// Almacena los listeners de media query para evitar la creación de duplicados.
 let darkModePreference: MediaQueryList;
 let changeThemeWhenSchemeChanged: (e: MediaQueryListEvent) => void;
 
 onMount(() => {
 	mode = getStoredTheme();
-	
-	// 监听系统主题变化（当处于AUTO_MODE时）
+
+	// Supervisar los cambios en el tema del sistema (cuando esté en AUTO_MODE)
 	darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 	changeThemeWhenSchemeChanged = (e) => {
-		// 只有在自动模式下才响应系统主题变化
+		// Solo responde a los cambios de tema del sistema en modo automático.
 		if (mode === AUTO_MODE) {
 			applyThemeToDocument(AUTO_MODE);
 		}
 	};
 	darkModePreference.addEventListener("change", changeThemeWhenSchemeChanged);
-	
-	// 清理函数
+
+	// Función de limpieza
 	return () => {
 		darkModePreference.removeEventListener("change", changeThemeWhenSchemeChanged);
 	};
@@ -38,8 +38,8 @@ onMount(() => {
 function switchScheme(newMode: LIGHT_DARK_MODE) {
 	mode = newMode;
 	setTheme(newMode);
-	
-	// 如果切换到自动模式，立即应用系统主题
+
+	// Si cambia al modo automático, el tema del sistema se aplicará inmediatamente.
 	if (newMode === AUTO_MODE) {
 		applyThemeToDocument(AUTO_MODE);
 	}
@@ -55,7 +55,7 @@ function toggleScheme() {
 	switchScheme(seq[(i + 1) % seq.length]);
 }
 
-// 使用防抖函数优化面板显示/隐藏
+// Utilice la función antivibración para optimizar la visualización/ocultación del panel.
 let panelTimeout: number | null = null;
 
 function showPanel() {
@@ -63,7 +63,7 @@ function showPanel() {
 		clearTimeout(panelTimeout);
 		panelTimeout = null;
 	}
-	
+
 	const panel = document.querySelector("#light-dark-panel") as HTMLElement | null;
 	if (panel) {
 		panel.classList.remove("float-panel-closed");
@@ -71,11 +71,11 @@ function showPanel() {
 }
 
 function hidePanel() {
-	// 添加防抖延迟，避免鼠标快速移动时的闪烁
+	// Añade un retardo de eliminación de rebotes para evitar parpadeos cuando el ratón se mueva rápidamente.
 	if (panelTimeout) {
 		clearTimeout(panelTimeout);
 	}
-	
+
 	panelTimeout = window.setTimeout(() => {
 		const panel = document.querySelector("#light-dark-panel") as HTMLElement | null;
 		if (panel) {
@@ -107,21 +107,21 @@ function hidePanel() {
                     onclick={() => switchScheme(LIGHT_MODE)}
             >
                 <Icon icon="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
-                你相信光吗
+                Do you believe in light
             </button>
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"
                     class:current-theme-btn={mode === DARK_MODE}
                     onclick={() => switchScheme(DARK_MODE)}
             >
                 <Icon icon="material-symbols:dark-mode-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
-                拥抱黑暗吧
+                Embrace the darkness
             </button>
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
                     class:current-theme-btn={mode === AUTO_MODE}
                     onclick={() => switchScheme(AUTO_MODE)}
             >
                 <Icon icon="material-symbols:radio-button-partial-outline" class="text-[1.25rem] mr-3"></Icon>
-                跟着系统变
+                Follow the system changes
             </button>
         </div>
     </div>

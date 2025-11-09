@@ -50,12 +50,12 @@ const imageClass = "w-full h-full object-cover image-content";
 const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative image-wrapper']} style={`--theme-hue: ${siteConfig.themeColor.hue}`} data-image-wrapper>
-    <!-- 加载条 -->
+    <!-- barra de carga -->
     <div class="loading-bar">
         <div class="loading-progress"></div>
     </div>
-    
-    <!-- 图片内容 -->
+
+    <!-- Contenido de la imagen -->
     <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
     {isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} loading="eager" fetchpriority={fetchpriority} data-image-element />}
     {!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle} loading="eager" fetchpriority={fetchpriority} data-image-element />}
@@ -75,11 +75,11 @@ const imageStyle = `object-position: ${position}`;
         overflow: hidden;
         transition: opacity 0.5s ease-out;
     }
-    
+
     :global(.dark) .loading-bar {
         background-color: rgba(75, 85, 99, 0.3);
     }
-    
+
     .loading-progress {
         height: 100%;
         width: 2rem;
@@ -87,7 +87,7 @@ const imageStyle = `object-position: ${position}`;
         animation: loading-progress 1.5s ease-in-out infinite;
         border-radius: 9999px;
     }
-    
+
     @keyframes loading-progress {
         0% {
             transform: translateX(-100%);
@@ -96,21 +96,21 @@ const imageStyle = `object-position: ${position}`;
             transform: translateX(400%);
         }
     }
-    
+
     .image-content {
         opacity: 0;
         transition: opacity 0.5s ease-out, transform 0.3s ease-out;
     }
-    
+
     .image-content.loaded {
         opacity: 1;
     }
-    
+
     .loading-bar.hide {
         opacity: 0;
         pointer-events: none;
     }
-    
+
     .image-wrapper:hover .image-content.loaded {
         transform: scale(1.05);
     }

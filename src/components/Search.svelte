@@ -1,7 +1,6 @@
 <script lang="ts">
 import Icon from "@iconify/svelte";
 import { url } from "@utils/url-utils.ts";
-import { onMount } from "svelte";
 
 // Función antivibración
 function debounce<T extends (...args: any[]) => any>(
@@ -43,7 +42,7 @@ const loadRSS = async (): Promise<void> => {
 		const items = xml.querySelectorAll("item");
 
 		posts = Array.from(items).map((item) => {
-			// 尝试多种方式获取content:encoded内容
+			// Prueba diferentes métodos para obtener contenido content:encoded.
 			let content = "";
 			const contentEncoded =
 				item.getElementsByTagNameNS("*", "encoded")[0]?.textContent ||
@@ -51,25 +50,25 @@ const loadRSS = async (): Promise<void> => {
 				"";
 
 			if (contentEncoded) {
-				// 移除HTML标签并解码HTML实体
+				// Eliminar etiquetas HTML y decodificar entidades HTML
 				const tempDiv = document.createElement("div");
 				tempDiv.innerHTML = contentEncoded;
 				content = tempDiv.textContent || tempDiv.innerText || "";
 			}
 
-			// 从link中提取相对路径
+			// Extracción de rutas relativas a partir de enlaces
 			const linkText = item.querySelector("link")?.textContent || "";
 			let relativePath = "";
 
-			// 处理多种可能的URL格式
+			// Manejo de múltiples formatos de URL posibles
 			if (linkText.includes("/posts/")) {
-				// 匹配 /posts/ 后的所有内容（包括多级路径）
+				// fósforo /posts/ todo después（Incluye rutas multinivel）
 				const match = linkText.match(/\/posts\/(.+?)(?:\/$|$)/);
 				if (match) {
 					relativePath = match[1];
 				}
 			} else {
-				// 如果不包含 /posts/，尝试获取最后的路径部分
+				// si no está incluido /posts/，Intenta conseguir la última parte del camino
 				const urlParts = linkText.split('/').filter(Boolean);
 				relativePath = urlParts[urlParts.length - 1] || "";
 			}
@@ -79,11 +78,11 @@ const loadRSS = async (): Promise<void> => {
 				description: item.querySelector("description")?.textContent || "",
 				content: content,
 				link: relativePath,
-				fullLink: linkText // 保留完整链接以备用
+				fullLink: linkText // Guarda el enlace completo para futuras consultas.
 			};
 		});
 
-		rssLoaded = true; // 标记为已加载
+		rssLoaded = true; // Marcado como cargado
 	} catch (error) {
 		console.error("Error fetching RSS:", error);
 	}
@@ -112,7 +111,7 @@ const highlightText = (text: string, keyword: string): string => {
     return text.replace(regex, "<mark>$1</mark>");
 };
 
-// 优化的搜索函数，提升性能
+// Función de búsqueda optimizada，Mejorar el rendimiento
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	if (!keyword.trim()) {
 		setPanelVisibility(false, isDesktop);
@@ -120,7 +119,7 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 		return;
 	}
 
-	// 在搜索前确保 RSS 数据已加载
+	// Asegúrese de que los datos RSS estén cargados antes de realizar la búsqueda.
 	await loadRSS();
 
 	isSearching = true;
@@ -129,7 +128,7 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 		const keywordLower = keyword.toLowerCase().trim();
 		const searchResults = posts
 			.filter((post) => {
-				// 优化搜索逻辑，减少字符串操作
+				// Optimizar la lógica de búsqueda，Reducir las operaciones de cadena
 				const titleMatch = post.title.toLowerCase().includes(keywordLower);
 				const descMatch = post.description?.toLowerCase().includes(keywordLower);
 				const linkMatch = post.link.toLowerCase().includes(keywordLower);
@@ -175,12 +174,12 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	}
 };
 
-// 创建防抖搜索函数
+// Crea una función de búsqueda de estabilización
 const debouncedSearch = debounce(search, 300);
 
-// 不再在组件挂载时自动加载 RSS，改为按需加载
+// En lugar de cargar automáticamente los feeds RSS cuando se montan los componentes, se cargarán bajo demanda.
 // onMount(async () => {
-// 	// RSS 现在会在首次搜索时按需加载
+// 	// Ahora, el RSS se cargará bajo demanda durante la primera búsqueda.
 // });
 
 $: if (keywordDesktop !== undefined) {
@@ -198,7 +197,7 @@ $: if (keywordMobile !== undefined) {
       dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
 ">
     <Icon icon="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"></Icon>
-    <input placeholder="往事书" bind:value={keywordDesktop} on:focus={() => debouncedSearch(keywordDesktop, true)}
+    <input placeholder="Search" bind:value={keywordDesktop} on:focus={() => debouncedSearch(keywordDesktop, true)}
            class="transition-all pl-10 text-sm bg-transparent outline-0
          h-full w-40 active:w-60 focus:w-60 text-black/50 dark:text-white/50"
     >
