@@ -2,7 +2,8 @@
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
+import "../styles/globals.css";
+import "../styles/markdown.css";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -75,7 +76,7 @@ const bannerOffset =
 				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 			})(window, document, "clarity", "script", "tajp0d55h4");
 		</script>
-		
+
 		<!-- Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8YKHXY480"></script>
 		<script>
@@ -84,10 +85,10 @@ const bannerOffset =
 			gtag('js', new Date());
 			gtag('config', 'G-D8YKHXY480');
 		</script>
-		
+
 		<!-- Umami -->
 		<script type="text/partytown" src="https://cloud.umami.is/script.js" data-website-id="a1a1f897-326f-4e68-a6f0-54e9dc361522"></script>
-		
+
 		<title>{pageTitle}</title>
 
 		<meta charset="UTF-8" />
@@ -167,39 +168,40 @@ const bannerOffset =
 	</body>
 </html>
 
-<style is:global define:vars={{
-	bannerOffset,
-	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
-	'banner-height': `${BANNER_HEIGHT}vh`,
-}}>
-@tailwind components;
-@layer components {
-	.enable-banner.is-home #banner-wrapper {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
-	}
-	.enable-banner #banner-wrapper {
-		@apply h-[var(--banner-height-home)]
-	}
+<style is:global define:vars={{ bannerOffset, 'banner-height-home': `${BANNER_HEIGHT_HOME}vh`, 'banner-height': `${BANNER_HEIGHT}vh` }}>
+.enable-banner.is-home #banner-wrapper {
+	height: var(--banner-height-home);
+	transform: translateY(var(--banner-height-extend));
+}
+.enable-banner #banner-wrapper {
+	height: var(--banner-height-home);
+}
 
-	.enable-banner.is-home #banner {
-		@apply h-[var(--banner-height-home)] translate-y-0
-	}
-	.enable-banner #banner {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--bannerOffset)]
-	}
-	.enable-banner.is-home #main-grid {
-		@apply translate-y-[var(--banner-height-extend)];
-	}
-	.enable-banner #top-row {
-		@apply h-[calc(var(--banner-height-home)_-_4.5rem)] transition-all duration-300
-	}
-	.enable-banner.is-home #sidebar-sticky {
-		@apply top-[calc(1rem_-_var(--banner-height-extend))]
-	}
-	.navbar-hidden {
-		@apply opacity-0 -translate-y-16
-	}
-	
+.enable-banner.is-home #banner {
+	height: var(--banner-height-home);
+	transform: translateY(0);
+}
+.enable-banner #banner {
+	height: var(--banner-height-home);
+	transform: translateY(var(--bannerOffset));
+}
+
+.enable-banner.is-home #main-grid {
+	transform: translateY(var(--banner-height-extend));
+}
+
+.enable-banner #top-row {
+	height: calc(var(--banner-height-home) - 4.5rem);
+	transition: all 0.3s;
+}
+
+.enable-banner.is-home #sidebar-sticky {
+	top: calc(1rem - var(--banner-height-extend));
+}
+
+.navbar-hidden {
+	opacity: 0;
+	transform: translateY(-4rem); /* 16 = 4rem en Tailwind (1rem = 4) */
 }
 </style>
 
@@ -252,34 +254,34 @@ function loadHue() {
  */
 function initImageLoading() {
     const imageWrappers = document.querySelectorAll('[data-image-wrapper]');
-    
+
     // 如果没有图片，直接返回
     if (imageWrappers.length === 0) return;
-    
+
     imageWrappers.forEach(wrapper => {
         const img = wrapper.querySelector('[data-image-element]');
         const loadingBar = wrapper.querySelector('.loading-bar');
-        
+
         if (!img || !loadingBar) return;
-        
+
         // 检查图片是否已经加载完成（从缓存）
         if (img.complete && img.naturalHeight !== 0) {
             img.classList.add('loaded');
             loadingBar.classList.add('hide');
             return;
         }
-        
+
         // 创建新的 Image 对象来检测加载
         const tempImg = new Image();
         tempImg.src = img.src;
-        
+
         tempImg.onload = () => {
             img.classList.add('loaded');
             setTimeout(() => {
                 loadingBar.classList.add('hide');
             }, 300);
         };
-        
+
         tempImg.onerror = () => {
             img.classList.add('loaded');
             loadingBar.classList.add('hide');
@@ -295,7 +297,7 @@ function setupImageObserver() {
     // 只有当页面上有图片时才创建观察器
     const hasImages = document.querySelectorAll('[data-image-wrapper]').length > 0;
     if (!hasImages) return;
-    
+
     const observer = new MutationObserver((mutations) => {
         let hasNewImages = false;
         mutations.forEach((mutation) => {
@@ -493,7 +495,7 @@ function setupSwupHooks() {
 			navbar.classList.add('navbar-hidden');
 		}
 	});
-    
+
 	window.swup.hooks.on('content:replace', () => {
         // 在替换内容前，销毁旧的灯箱实例
         if (fancyboxInstance) {
@@ -505,7 +507,7 @@ function setupSwupHooks() {
 	window.swup.hooks.on('page:view', () => {
         // 页面切换动画完成后，为新内容初始化脚本
         initPageContent();
-        
+
         // 恢复页面高度
 		const heightExtend = document.getElementById('page-height-extend');
 		if (heightExtend) heightExtend.classList.remove('hidden');
@@ -548,7 +550,7 @@ function initializeSite() {
 	setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"]);
 	setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"]);
 	setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"]);
-	
+
     // 显示 Banner
     showBanner();
 
@@ -561,7 +563,7 @@ function initializeSite() {
 
 	// 首次加载页面时，执行内容初始化
 	initPageContent();
-	
+
 	// [新增] 设置图片观察器（仅当页面上有图片时）
 	if (document.querySelectorAll('[data-image-wrapper]').length > 0) {
 		setupImageObserver();

@@ -1,7 +1,6 @@
 // astro.config.mjs
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
-import tailwind from "@astrojs/tailwind";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import swup from "@swup/astro";
@@ -26,6 +25,7 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
+import tailwind from "@tailwindcss/vite";
 import rehypeExternalLinks from 'rehype-external-links';
 import { LinkCardComponent } from "./src/plugins/rehype-component-link-card.mjs";
 
@@ -52,9 +52,6 @@ export default defineConfig({
   },*/
 
   integrations: [
-    tailwind({
-      nesting: true,
-    }),
     partytown(),
 
     swup({
@@ -204,5 +201,6 @@ export default defineConfig({
       cssMinify: true,
       assetsInlineLimit: 4096,
     },
+    plugins: [tailwind()]
   },
 });

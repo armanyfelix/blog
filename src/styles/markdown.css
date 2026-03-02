@@ -1,6 +1,66 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@utility link-base {
+  position: relative;
+  background: none;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  color: var(--primary);
+  text-decoration-color: var(--link-underline);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  display: inline-block;
+  transition: all 0.2s ease;
+
+  &:is(:hover, :active) {
+    text-decoration: none;
+    background: var(--btn-plain-bg-hover);
+    border-bottom: 1px dashed var(--link-hover);
+  }
+}
+
+@utility btn-regular-dark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & {
+    background-color: oklch(0.45 0.01 var(--hue));
+  }
+
+  &:hover {
+    background-color: oklch(0.5 0.01 var(--hue));
+  }
+
+  &:active {
+    background-color: oklch(0.55 0.01 var(--hue));
+  }
+
+  :where(.dark) & {
+    background-color: oklch(0.3 0.02 var(--hue));
+
+    &:hover {
+      background-color: oklch(0.35 0.03 var(--hue));
+    }
+
+    &:active {
+      background-color: oklch(0.4 0.03 var(--hue));
+    }
+  }
+
+  &.success {
+    background-color: oklch(0.75 0.14 var(--hue));
+
+    :where(.dark) & {
+      background-color: oklch(0.75 0.14 var(--hue));
+    }
+  }
+}
 
 @layer components {
   /* 自定义按钮样式 */
@@ -8,31 +68,31 @@
     @apply flex items-center justify-center;
     background-color: oklch(0.45 0.01 var(--hue));
   }
-  
+
   .btn-regular-dark:hover {
-    background-color: oklch(0.50 0.01 var(--hue));
+    background-color: oklch(0.5 0.01 var(--hue));
   }
-  
+
   .btn-regular-dark:active {
     background-color: oklch(0.55 0.01 var(--hue));
   }
-  
+
   .dark .btn-regular-dark {
-    background-color: oklch(0.30 0.02 var(--hue));
+    background-color: oklch(0.3 0.02 var(--hue));
   }
-  
+
   .dark .btn-regular-dark:hover {
     background-color: oklch(0.35 0.03 var(--hue));
   }
-  
+
   .dark .btn-regular-dark:active {
-    background-color: oklch(0.40 0.03 var(--hue));
+    background-color: oklch(0.4 0.03 var(--hue));
   }
-  
+
   .btn-regular-dark.success {
     background-color: oklch(0.75 0.14 var(--hue));
   }
-  
+
   .dark .btn-regular-dark.success {
     background-color: oklch(0.75 0.14 var(--hue));
   }
@@ -46,7 +106,7 @@
     -webkit-box-decoration-break: clone;
     display: inline-block;
     transition: all 0.2s ease;
-    
+
     &:is(:hover, :active) {
       text-decoration: none;
       background: var(--btn-plain-bg-hover);
@@ -60,10 +120,15 @@
       @apply text-3xl;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       .anchor {
         @apply transition -m-0.5 ml-[0.2ch] p-0.5 select-none opacity-0 no-underline;
-        
+
         .anchor-icon {
           @apply mx-[0.45ch];
         }
@@ -77,14 +142,24 @@
     }
 
     a:not(.no-styling) {
-      @apply link;
+      @apply link-base;
     }
 
     code {
       @apply bg-[var(--inline-code-bg)] text-[var(--inline-code-color)] px-1 py-0.5 rounded-md overflow-hidden;
-      font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-      
-      &:before, &:after {
+      font-family:
+        "JetBrains Mono Variable",
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        Liberation Mono,
+        Courier New,
+        monospace;
+
+      &:before,
+      &:after {
         content: none;
       }
 
@@ -96,7 +171,7 @@
           counter-increment: line;
           direction: rtl;
         }
-        &:last-child:empty, 
+        &:last-child:empty,
         &:last-child:has(> span:empty:only-child) {
           display: none;
         }
@@ -106,23 +181,23 @@
     .copy-btn {
       all: initial;
       @apply btn-regular-dark opacity-0 shadow-lg shadow-black/50 absolute active:scale-90 h-8 w-8 top-3 right-3 text-sm rounded-lg transition-all ease-in-out z-20 cursor-pointer;
-      
+
       &-icon {
         @apply absolute top-1/2 left-1/2 transition -translate-x-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none;
       }
-      
+
       .copy-icon {
         @apply opacity-100 fill-white dark:fill-white/75;
       }
-      
+
       &.success .copy-icon {
         @apply opacity-0 fill-[var(--deep-text)];
       }
-      
+
       .success-icon {
         @apply opacity-0 fill-white;
       }
-      
+
       &.success .success-icon {
         @apply opacity-100;
       }
@@ -134,13 +209,14 @@
 
     .expressive-code {
       @apply my-4;
-      
+
       ::selection {
         @apply bg-[var(--codeblock-selection)];
       }
     }
 
-    ul, ol {
+    ul,
+    ol {
       li::marker {
         @apply text-[var(--primary)];
       }
@@ -154,7 +230,8 @@
         @apply content-[''] absolute -left-1 block transition bg-[var(--btn-regular-bg)] h-full w-1 rounded-full;
       }
 
-      p:before, p:after {
+      p:before,
+      p:after {
         @apply content-none;
       }
     }
@@ -174,7 +251,7 @@ a.link,
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   transition: all 0.2s ease;
-  
+
   &:is(:hover, :active) {
     text-decoration: none;
     background: var(--btn-plain-bg-hover);
@@ -183,7 +260,8 @@ a.link,
 }
 
 /* 其他全局样式 */
-.custom-md img, #post-cover img {
+.custom-md img,
+#post-cover img {
   @apply cursor-zoom-in;
 }
 
