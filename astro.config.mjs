@@ -26,7 +26,8 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import tailwind from "@tailwindcss/vite";
-import rehypeExternalLinks from 'rehype-external-links';
+import rehypeExternalLinks from "rehype-external-links";
+import { unified } from '@astrojs/markdown-remark';
 import { LinkCardComponent } from "./src/plugins/rehype-component-link-card.mjs";
 
 // https://astro.build/config
@@ -37,96 +38,12 @@ export default defineConfig({
   },
   prefetch: {
     prefetchAll: false,
-    defaultStrategy: "hover"
+    defaultStrategy: "hover",
   },
-  
   site: "https://fuwari.oh1.top/",
   base: "/",
   trailingSlash: "always",
-
-  /*image: {
-    service: {
-      entrypoint: "astro/assets/services/noop",
-      config: {}
-    }
-  },*/
-
-  integrations: [
-    partytown(),
-
-    swup({
-      theme: false,
-      animationClass: "transition-swup-",
-      containers: ["main", "#toc", "#series"],
-      smoothScrolling: true,
-      cache: true,
-      preload: true,
-      accessibility: true,
-      updateHead: true,
-      updateBodyClass: false,
-      globalInstance: true,
-    }),
-    icon({
-      include: {
-        mdi: ["*"],
-        "preprocess: vitePreprocess(),": ["*"],
-        "fa6-brands": ["*"],
-        "fa6-regular": ["*"],
-        "fa6-solid": ["*"],
-      },
-      optimize: true,
-      cache: true,
-    }),
-    expressiveCode({
-      themes: [expressiveCodeConfig.theme, expressiveCodeConfig.theme],
-      plugins: [
-        pluginCollapsibleSections(),
-        pluginLineNumbers(),
-        pluginLanguageBadge(),
-        pluginCustomCopyButton()
-      ],
-      defaultProps: {
-        wrap: false,
-        overridesByLang: {
-          'shellsession': {
-            showLineNumbers: false,
-          },
-        },
-      },
-      styleOverrides: {
-        codeBackground: "var(--codeblock-bg)",
-        borderRadius: "0.5rem",
-        borderColor: "none",
-        codeFontSize: "0.875rem",
-        codeFontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-        codeLineHeight: "1.5rem",
-        frames: {
-          editorBackground: "var(--codeblock-bg)",
-          terminalBackground: "var(--codeblock-bg)",
-          terminalTitlebarBackground: "var(--codeblock-topbar-bg)",
-          editorTabBarBackground: "var(--codeblock-topbar-bg)",
-          editorActiveTabBackground: "none",
-          editorActiveTabIndicatorBottomColor: "var(--primary)",
-          editorActiveTabIndicatorTopColor: "none",
-          editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
-          terminalTitlebarBorderBottomColor: "none"
-        },
-        textMarkers: {
-          delHue: 0,
-          insHue: 180,
-          markHue: 250
-        }
-      },
-      frames: {
-        showCopyToClipboardButton: false,
-      }
-    }),
-    mdx(),
-    svelte(),
-    sitemap(),
-  ],
-
-  markdown: {
+  processor: unified({
     remarkPlugins: [
       remarkMath,
       remarkReadingTime,
@@ -156,7 +73,7 @@ export default defineConfig({
       [
         rehypeExternalLinks,
         {
-        target: '_blank',
+          target: "_blank",
         },
       ],
       [
@@ -182,9 +99,88 @@ export default defineConfig({
           },
         },
       ],
-    ],
-  },
-
+    ], // Add rehype plugins if needed
+  }),
+  /*image: {
+    service: {
+      entrypoint: "astro/assets/services/noop",
+      config: {}
+    }
+  },*/
+  integrations: [
+    partytown(),
+    swup({
+      theme: false,
+      animationClass: "transition-swup-",
+      containers: ["main", "#toc", "#series"],
+      smoothScrolling: true,
+      cache: true,
+      preload: true,
+      accessibility: true,
+      updateHead: true,
+      updateBodyClass: false,
+      globalInstance: true,
+    }),
+    icon({
+      include: {
+        mdi: ["*"],
+        "preprocess: vitePreprocess(),": ["*"],
+        "fa6-brands": ["*"],
+        "fa6-regular": ["*"],
+        "fa6-solid": ["*"],
+      },
+      optimize: true,
+      cache: true,
+    }),
+    expressiveCode({
+      themes: [expressiveCodeConfig.theme, expressiveCodeConfig.theme],
+      plugins: [
+        pluginCollapsibleSections(),
+        pluginLineNumbers(),
+        pluginLanguageBadge(),
+        pluginCustomCopyButton(),
+      ],
+      defaultProps: {
+        wrap: false,
+        overridesByLang: {
+          shellsession: {
+            showLineNumbers: false,
+          },
+        },
+      },
+      styleOverrides: {
+        codeBackground: "var(--codeblock-bg)",
+        borderRadius: "0.5rem",
+        borderColor: "none",
+        codeFontSize: "0.875rem",
+        codeFontFamily:
+          "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+        codeLineHeight: "1.5rem",
+        frames: {
+          editorBackground: "var(--codeblock-bg)",
+          terminalBackground: "var(--codeblock-bg)",
+          terminalTitlebarBackground: "var(--codeblock-topbar-bg)",
+          editorTabBarBackground: "var(--codeblock-topbar-bg)",
+          editorActiveTabBackground: "none",
+          editorActiveTabIndicatorBottomColor: "var(--primary)",
+          editorActiveTabIndicatorTopColor: "none",
+          editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
+          terminalTitlebarBorderBottomColor: "none",
+        },
+        textMarkers: {
+          delHue: 0,
+          insHue: 180,
+          markHue: 250,
+        },
+      },
+      frames: {
+        showCopyToClipboardButton: false,
+      },
+    }),
+    mdx(),
+    svelte(),
+    sitemap(),
+  ],
   vite: {
     build: {
       rollupOptions: {
@@ -201,6 +197,6 @@ export default defineConfig({
       cssMinify: true,
       assetsInlineLimit: 4096,
     },
-    plugins: [tailwind()]
+    plugins: [tailwind()],
   },
 });
