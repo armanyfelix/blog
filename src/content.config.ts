@@ -24,6 +24,7 @@ const posts = defineCollection({
 });
 
 const spec = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/spec" }),
   schema: z.object({}),
 });
 
