@@ -1,6 +1,7 @@
 ---
 // 导入所需模块和组件
 import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
 import path from "node:path";
 import { Icon } from "astro-icon/components";
 import { getDir } from "../utils/url-utils";
@@ -47,7 +48,7 @@ const hasCover = image !== undefined && image !== null && image !== "";
 const coverWidth = "28%";
 
 // 获取文章渲染后的额外元数据
-const { remarkPluginFrontmatter } = await entry.render();
+const { remarkPluginFrontmatter } = await render(entry);
 ---
 
 <!-- 文章卡片容器 -->
