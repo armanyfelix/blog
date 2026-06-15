@@ -9,7 +9,7 @@ export let sortedPosts: Post[] = [];
 
 // 定义文章和年份分组的数据结构
 interface Post {
-    slug: string;
+    id: string;
     data: {
         title: string;
         tags: string[];
@@ -121,7 +121,7 @@ onMount(async () => {
             <!-- 当前年份下的文章列表 -->
             {#each group.posts as post}
                 <a
-                    href={getPostUrlBySlug(post.slug)}
+                    href={getPostUrlBySlug(post.id)}
                     aria-label={post.data.title}
                     class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial]"
                 >

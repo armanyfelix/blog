@@ -1,5 +1,6 @@
 ---
 import path from "node:path";
+import { render } from "astro:content";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
@@ -17,15 +18,15 @@ import Giscus from "../../components/misc/Giscus.astro";
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
 	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
+		params: { slug: entry.id },
 		props: { entry },
 	}));
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
+const { Content, headings } = await render(entry);
 
-const { remarkPluginFrontmatter } = await entry.render();
+const { remarkPluginFrontmatter } = await render(entry);
 
 const jsonLd = {
 	"@context": "https://schema.org",

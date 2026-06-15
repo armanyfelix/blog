@@ -97,7 +97,7 @@ export async function GET(context: APIContext) {
 			title: stripInvalidXmlChars(post.data.title),
 			description: stripInvalidXmlChars(post.data.description || ''),
 			pubDate: post.data.published,
-			link: url(`/posts/${post.slug}/`),
+			link: url(`/posts/${post.id}/`),
 			content: sanitizeHtml(finalContent, {
 				allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
 				allowedAttributes: {

@@ -87,7 +87,7 @@ const groups: { category: string; series: Series[] }[] = (() => {
                 </div>
                 
                 {group.series.map(s => (
-                    <a href={getPostUrlBySlug(s.posts[s.posts.length-1].slug)}
+                    <a href={getPostUrlBySlug(s.posts[s.posts.length-1].id)}
                        aria-label={s.name}
                        class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial]"
                     >

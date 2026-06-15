@@ -22,7 +22,6 @@ type PostEntry = CollectionEntry<"posts">;
   {
     page.data.map((entry: PostEntry, index: number) => {
       const delay = ANIMATION_DELAY_START + index * ANIMATION_DELAY_INTERVAL;
-
       return <PostCard
           entry={entry}
           title={entry.data.title}
@@ -30,7 +29,7 @@ type PostEntry = CollectionEntry<"posts">;
           category={entry.data.category}
           published={entry.data.published}
           updated={entry.data.updated}
-          url={getPostUrlBySlug(entry.slug)}
+          url={getPostUrlBySlug(entry.id)}
           image={entry.data.image}
           description={entry.data.description}
           draft={entry.data.draft}
