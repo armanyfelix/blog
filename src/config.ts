@@ -8,8 +8,8 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "yCENzh's Blog",
-	subtitle: "爱你所爱~",
+	title: "Armany's Blog",
+	subtitle: "Real shit~",
 	themeColor: {
 		hue: 275, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
@@ -50,7 +50,7 @@ export const navBarConfig: NavBarConfig = {
 			external: true, // Show an external link icon and will open in a new tab
 		},*/
 		{
-			name: "开往",
+			name: "Portfolio",
 			url: "https://www.travellings.cn/train.html",
 			external: true,
 		},
@@ -59,7 +59,7 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "/avatar.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/' 原assets/images/demo-avatar.png,可选https://q2.qlogo.cn/headimg_dl?dst_uin=189563385&spec=0
-	name: "yCENzh",
+	name: "Armany",
 	bio: "Protect What You Love./爱你所爱！",
 	links: [
 		/*{
@@ -77,7 +77,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/yCENzh",
+			url: "https://github.com/armanyfelix",
 		},
 		{
 			name: "Telegram",
