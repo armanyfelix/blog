@@ -27,23 +27,29 @@ import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import tailwind from "@tailwindcss/vite";
 import rehypeExternalLinks from "rehype-external-links";
-import { unified } from '@astrojs/markdown-remark';
+import { unified } from "@astrojs/markdown-remark";
 import { LinkCardComponent } from "./src/plugins/rehype-component-link-card.mjs";
+
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
+  output: "server",
   build: {
     concurrency: 1,
     compressHTML: true,
   },
+
   prefetch: {
     prefetchAll: false,
     defaultStrategy: "hover",
   },
+
   site: "https://blog.armanyfelix.dev/",
   base: "/",
   trailingSlash: "always",
-  processor: unified({
+
+  markdown: {
     remarkPlugins: [
       remarkMath,
       remarkReadingTime,
@@ -100,7 +106,8 @@ export default defineConfig({
         },
       ],
     ], // Add rehype plugins if needed
-  }),
+  },
+
   /*image: {
     service: {
       entrypoint: "astro/assets/services/noop",
@@ -194,9 +201,11 @@ export default defineConfig({
           warn(warning);
         },
       },
-      cssMinify: true,
+      cssMinify: false,
       assetsInlineLimit: 4096,
     },
     plugins: [tailwind()],
   },
+
+  adapter: cloudflare(),
 });
