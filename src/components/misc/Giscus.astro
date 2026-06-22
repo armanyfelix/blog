@@ -1,21 +1,21 @@
 ---
 const configHTML = `
-<script src="https://giscus.app/client.js"
-        data-repo="yCENzh/Fuwari-yCENzh"
-        data-repo-id="R_kgDOPe85cQ"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOPe85cc4CuYZG"
-        data-mapping="pathname"
-        data-strict="1"
-        data-reactions-enabled="1"
-        data-emit-metadata="1"
-        data-input-position="top"
-        data-theme="https://giscus-dkh.pages.dev/A.css"
-        data-lang="zh-CN"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
-</script>
+    <script src="https://giscus.app/client.js"
+            data-repo="armanyfelix/blog"
+            data-repo-id="R_kgDOQRaHlA"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOQRaHlM4C_sEl"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="https://giscus-dkh.pages.dev/A.css"
+            data-lang="es"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async>
+    </script>
 `;
 
 // 使用正则表达式解析配置
@@ -37,7 +37,7 @@ const config = {
   emitMetadata: extractAttribute(configHTML, 'data-emit-metadata') || '0',
   inputPosition: extractAttribute(configHTML, 'data-input-position') || 'bottom',
   theme: extractAttribute(configHTML, 'data-theme') || 'preferred_color_scheme',
-  lang: extractAttribute(configHTML, 'data-lang') || 'zh-CN',
+  lang: extractAttribute(configHTML, 'data-lang') || 'es-MX',
   loading: extractAttribute(configHTML, 'data-loading') || 'lazy'
 };
 ---

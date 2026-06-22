@@ -89,7 +89,7 @@ const hasCategory = category && category.trim() !== "";
           href={getCategoryUrl(category)} 
           aria-label={`View all posts in the ${category} category`}
           class="link-lg transition text-50 text-sm font-medium
-                 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap"
+                 hover:text-(--primary) dark:hover:text-(--primary) whitespace-nowrap"
         >
           {category}
         </a>
@@ -118,14 +118,14 @@ const hasCategory = category && category.trim() !== "";
           <>
             {/* 在标签之间添加分隔符（第一个标签前不添加） */}
             {index > 0 && (
-              <div class="mx-1.5 text-[var(--meta-divider)] text-sm">/</div>
+              <div class="mx-1.5 text-(--meta-divider) text-sm">/</div>
             )}
             {/* 单个标签链接 */}
             <a
               href={getTagUrl(tag)}
               aria-label={`View all posts with the ${tag.trim()} tag`}
               class="link-lg transition text-50 text-sm font-medium
-                     hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap"
+                     hover:text-(--primary) dark:hover:text-(--primary) whitespace-nowrap"
             >
               {tag.trim()}
             </a>

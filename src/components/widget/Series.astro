@@ -24,16 +24,16 @@ const isCollapsed = sortedSeriesPosts.length > COLLAPSE_THRESHOLD
 
 <div class="card-base p-4">
   <div class="font-bold text-lg text-neutral-900 dark:text-neutral-100 relative mb-3
-    before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-    before:absolute before:left-[-16px] before:top-[5.5px]">
-    专栏：{series}
+    before:w-1 before:h-4 before:rounded-md before:bg-(--primary)
+    before:absolute before:-left-4 before:top-[5.5px]">
+    Series：{series}
   </div>
   
   <div id="series-posts" class:list={["space-y-2", 
     {"overflow-hidden max-h-60": isCollapsed, "max-h-[10000px]": !isCollapsed}]}>
     {sortedSeriesPosts.map((post) => (
       <a href={getPostUrlBySlug(post.id)} 
-         class="block p-2 rounded hover:bg-[var(--btn-plain-bg-hover)] truncate">
+         class="block p-2 rounded hover:bg-(--btn-plain-bg-hover) truncate">
         <div class="text-sm font-medium text-neutral-800 dark:text-neutral-200 truncate">
           {post.data.title}
         </div>
@@ -46,8 +46,8 @@ const isCollapsed = sortedSeriesPosts.length > COLLAPSE_THRESHOLD
   
   {isCollapsed && (
     <div class="pt-2">
-      <button id="expand-series-btn" class="btn-plain text-xs text-[var(--primary)]">
-        展开 共 {sortedSeriesPosts.length} 篇文章
+        <button type="button" id="expand-series-btn" class="btn-plain text-xs text-(--primary)">
+        Expand {sortedSeriesPosts.length} Articles
       </button>
     </div>
   )}

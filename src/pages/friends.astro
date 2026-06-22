@@ -6,14 +6,14 @@ import Giscus from "../components/misc/Giscus.astro";
 // 从JSON文件加载友链数据
 const friends = friendsData;
 ---
-<MainGridLayout title="友链" description="友链">
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+<MainGridLayout title="Friendly links" description="Friendly links">
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full ">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 my-4">
                 {friends.map((friend) => (
-                    <div class="flex flex-nowrap items-stretch h-28 gap-4 rounded-[var(--radius-large)]">
-                        <div class="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-zinc-200 dark:bg-zinc-900">
-                            <img src={friend.icon} alt={`${friend.name}的头像`} class="w-full h-full object-cover">
+                    <div class="flex flex-nowrap items-stretch h-28 gap-4 rounded-(--radius-large)">
+                        <div class="w-28 h-28 shrink-0 rounded-lg overflow-hidden bg-zinc-200 dark:bg-zinc-900">
+                            <img src={friend.icon} alt={`${friend.name} profile pic`} class="w-full h-full object-cover" />
                         </div>
                         <div class="grow w-full">
                             <div class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 mb-1">{friend.name}</div>
@@ -33,7 +33,7 @@ const friends = friendsData;
         </div>
     </div>
     
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mt-4">
+    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative mt-4">
         <div class="card-base z-10 px-6 md:px-9 py-6 relative w-full">
             <Giscus />
         </div>
