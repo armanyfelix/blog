@@ -15,10 +15,10 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 	},
 	[LinkPreset.Series]: {
 		name: "series",
-		url: '/series/',
+		url: "/series/",
 	},
 	[LinkPreset.Friends]: {
 		name: "friends",
-		url: '/friends/',
+		url: "/friends/",
 	},
 };

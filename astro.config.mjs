@@ -40,7 +40,7 @@ export default defineConfig({
     prefetchAll: false,
     defaultStrategy: "hover",
   },
-  site: "https://fuwari.oh1.top/",
+  site: "https://blog.armanyfelix.dev/",
   base: "/",
   trailingSlash: "always",
   processor: unified({
